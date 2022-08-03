@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Board, BoardStatus } from './boards.model';
 import {v1 as uuid} from 'uuid'; // v1은 uuid의 버전 중 하나
 import { createBoardDto } from './dto/create-board.dto';
@@ -48,4 +48,33 @@ export class BoardsService {
         
     }
 
+    getBoardById(id: string): Board{
+        const found = this.boards.find((board) => board.id===id); 
+        if(!found) {
+            throw new NotFoundException(`Can't find Board with id ${id}`);
+        }
+
+        return found;
+        // board 하나 가져오는데 보드 하나의 아이디(board.id)가 파라미터로 들어온 아이디(id)랑 일치해야한다
+        //  기존코드 :       return this.boards.find((board) => board.id===id); 
+        // 기존에는 id에 맞는 글이 없으면 없다고 리턴을 안하기에 해당 서비스에 NotFoundException(원하는 메세지) 추가
+
+    }
+
+    deleteBoard(id:string): void{
+        //id를 이용해서 지우기에 입력값을 id로 두고
+        // 따로 리턴값이 필요없기에 리턴값 void선언
+        const found = this.getBoardById(id); // id에 없는 값이 들어올 수 있기에 해당 경우, 없다는 것을 알려주기 위해 처리
+        // 따로 NotFoundException 을 주지 않는 이유는 위의 getBoardById 에서 처리해주기에 따로 exception처리 x
+        this.boards = this.boards.filter((board) => board.id !== found.id); //
+        // 예외처리전 코드   this.boards = this.boards.filter((board) => board.id !== id); // 
+ 
+        //filter 함수 위의 식 : id가 겉은 건 지워내고 나머지를 보여줌
+    }
+
+    updateBoardStatus(id: string, status: BoardStatus): Board{
+        const board = this.getBoardById(id);
+        board.status = status;
+        return board;
+    }
 }
