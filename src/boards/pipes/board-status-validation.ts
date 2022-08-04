@@ -1,5 +1,5 @@
 import { ArgumentMetadata, BadRequestException, PipeTransform } from "@nestjs/common";
-import { BoardStatus } from "../boards.model";
+import { BoardStatus } from "../board-status.enum";
 
 export class BoardStatusValidationPipe implements PipeTransform{
     // 보드의 상태(공개 비공개글)의 유효성 체크이기에 컨트롤러 중에서도 보드의 Status부분에 삽입

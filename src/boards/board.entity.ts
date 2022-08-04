@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
-import { BoardStatus } from "./boards.model";
+import { BoardStatus } from "./board-status.enum";
 
 
 @Entity() // 해당 데코레이터를 통해 해당 모델이 엔티티 모델임을 선언
